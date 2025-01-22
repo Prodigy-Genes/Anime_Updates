@@ -1,0 +1,80 @@
+2025-01-22 13:40:33,334 - INFO - Starting scheduler with 30 minute interval
+2025-01-22 13:50:22,969 - INFO - Starting scheduler with 1 minute interval
+2025-01-22 13:51:22,981 - INFO - Starting scraper run
+2025-01-22 13:51:22,982 - INFO - ====== WebDriver manager ======
+2025-01-22 13:51:23,497 - INFO - Get LATEST chromedriver version for google-chrome
+2025-01-22 13:51:24,204 - INFO - Get LATEST chromedriver version for google-chrome
+2025-01-22 13:51:24,589 - INFO - Driver [/home/prodigygenes/.wdm/drivers/chromedriver/linux64/132.0.6834.83/chromedriver-linux64/chromedriver] found in cache
+2025-01-22 13:51:33,536 - INFO - New article found: Crunchyroll Winter 2025 Dubs Include Solo Leveling Season 2 and More
+2025-01-22 13:51:34,127 - INFO - New article found: Crunchyroll Game Vault: All the New Games Joining the Lineup (UPDATED 1/16)
+2025-01-22 13:51:34,302 - INFO - New article found: Re:ZERO -Starting Life in Another World- 3rd Season Anime Goes on the Counterattack in New Trailer
+2025-01-22 13:51:34,676 - INFO - New article found: My Hero Academia: Vigilantes Anime Reveals Premiere Date, Cast in New Trailer
+2025-01-22 13:51:34,801 - INFO - New article found: Rock Band Pachae Releases I Have a Crush at Work Anime Ending Song Music Video
+2025-01-22 13:51:35,659 - INFO - New article found: Demon Slayer -KIMETSU NO YAIBA- the stage 5th Show Releases New Trailer, Visuals
+2025-01-22 13:51:35,803 - INFO - New article found: Is It Wrong to Try to Pick Up Girls in a Dungeon? Game Delayed to Match New Anime Schedule
+2025-01-22 13:51:35,938 - INFO - New article found: Honey Lemon Soda English Dub Reveals Cast & Crew, Release Date
+2025-01-22 13:51:36,077 - INFO - New article found: Ameku M.D.: Doctor Detective English Dub Reveals Cast & Crew, Release Date
+2025-01-22 13:51:36,505 - INFO - New article found: The Ossan Newbie Adventurer English Dub Announced, Cast & Crew Revealed
+2025-01-22 13:51:36,636 - INFO - New article found: Medaka Kuroiwa is Impervious to My Charms English Dub Reveals Cast & Crew, Release Date
+2025-01-22 13:51:36,759 - INFO - New article found: Headhunted to Another World: From Salaryman to Big Four! English Dub Reveals Cast & Crew, Release Date
+2025-01-22 13:51:38,356 - INFO - New article found: J-POP Artist Reol’s Top 9 Anime and Exclusive Video Interview
+2025-01-22 13:51:39,163 - INFO - New article found: The Apothecary Diaries Season 2: Where to Watch, Trailers, Voice Cast & More
+2025-01-22 13:51:39,296 - INFO - New article found: Dr. STONE SCIENCE FUTURE: Where to Watch, Trailers, Voice Cast & More
+2025-01-22 13:51:39,433 - INFO - New article found: Solo Leveling Season 2: Release Time, Where to Watch, Trailers, Voice Cast & More
+2025-01-22 13:51:39,798 - INFO - Found 16 new articles
+2025-01-22 14:05:12,575 - INFO - Starting scheduler with 1 minute interval
+2025-01-22 14:06:12,592 - INFO - Starting scraper run
+2025-01-22 14:06:13,408 - INFO - ====== WebDriver manager ======
+2025-01-22 14:06:13,971 - INFO - Get LATEST chromedriver version for google-chrome
+2025-01-22 14:06:14,374 - INFO - Get LATEST chromedriver version for google-chrome
+2025-01-22 14:06:14,763 - INFO - Driver [/home/prodigygenes/.wdm/drivers/chromedriver/linux64/132.0.6834.83/chromedriver-linux64/chromedriver] found in cache
+2025-01-22 14:06:25,894 - INFO - New article found: Crunchyroll Winter 2025 Dubs Include Solo Leveling Season 2 and More
+2025-01-22 14:06:26,797 - INFO - New article found: Crunchyroll Game Vault: All the New Games Joining the Lineup (UPDATED 1/16)
+2025-01-22 14:06:28,086 - INFO - New article found: Ameku M.D.: Doctor Detective English Dub Reveals Cast & Crew, Release Date
+2025-01-22 14:06:28,329 - INFO - New article found: Honey Lemon Soda English Dub Reveals Cast & Crew, Release Date
+2025-01-22 14:06:28,542 - INFO - New article found: The Ossan Newbie Adventurer English Dub Announced, Cast & Crew Revealed
+2025-01-22 14:06:28,712 - INFO - New article found: Medaka Kuroiwa is Impervious to My Charms English Dub Reveals Cast & Crew, Release Date
+2025-01-22 14:06:28,883 - INFO - New article found: Headhunted to Another World: From Salaryman to Big Four! English Dub Reveals Cast & Crew, Release Date
+2025-01-22 14:06:29,178 - INFO - Found 7 new articles
+2025-01-22 14:10:39,388 - INFO - Starting scheduler with 1 minute interval
+2025-01-22 14:11:39,401 - INFO - Starting scraper run
+2025-01-22 14:11:39,402 - INFO - ====== WebDriver manager ======
+2025-01-22 14:11:39,853 - INFO - Get LATEST chromedriver version for google-chrome
+2025-01-22 14:11:40,241 - INFO - Get LATEST chromedriver version for google-chrome
+2025-01-22 14:11:40,622 - INFO - Driver [/home/prodigygenes/.wdm/drivers/chromedriver/linux64/132.0.6834.83/chromedriver-linux64/chromedriver] found in cache
+2025-01-22 14:11:49,232 - INFO - New article found: Crunchyroll Winter 2025 Dubs Include Solo Leveling Season 2 and More
+2025-01-22 14:11:50,058 - INFO - New article found: Crunchyroll Game Vault: All the New Games Joining the Lineup (UPDATED 1/16)
+2025-01-22 14:11:51,748 - INFO - Found 2 new articles
+2025-01-22 14:12:54,734 - INFO - Starting scraper run
+2025-01-22 14:12:54,735 - INFO - ====== WebDriver manager ======
+2025-01-22 14:12:55,211 - INFO - Get LATEST chromedriver version for google-chrome
+2025-01-22 14:12:55,592 - INFO - Get LATEST chromedriver version for google-chrome
+2025-01-22 14:12:55,968 - INFO - Driver [/home/prodigygenes/.wdm/drivers/chromedriver/linux64/132.0.6834.83/chromedriver-linux64/chromedriver] found in cache
+2025-01-22 14:13:13,733 - INFO - Starting scheduler with 1 minute interval
+2025-01-22 14:14:13,748 - INFO - Starting scraper run
+2025-01-22 14:14:13,748 - INFO - ====== WebDriver manager ======
+2025-01-22 14:14:14,372 - INFO - Get LATEST chromedriver version for google-chrome
+2025-01-22 14:14:15,237 - INFO - Get LATEST chromedriver version for google-chrome
+2025-01-22 14:14:15,620 - INFO - Driver [/home/prodigygenes/.wdm/drivers/chromedriver/linux64/132.0.6834.83/chromedriver-linux64/chromedriver] found in cache
+2025-01-22 14:14:25,097 - INFO - New article found: Crunchyroll Winter 2025 Dubs Include Solo Leveling Season 2 and More
+2025-01-22 14:14:25,733 - INFO - New article found: Crunchyroll Game Vault: All the New Games Joining the Lineup (UPDATED 1/16)
+2025-01-22 14:14:25,887 - INFO - New article found: Re:ZERO -Starting Life in Another World- 3rd Season Anime Goes on the Counterattack in New Trailer
+2025-01-22 14:14:26,350 - INFO - New article found: My Hero Academia: Vigilantes Anime Reveals Premiere Date, Cast in New Trailer
+2025-01-22 14:14:26,502 - INFO - New article found: Rock Band Pachae Releases I Have a Crush at Work Anime Ending Song Music Video
+2025-01-22 14:14:26,810 - INFO - New article found: Demon Slayer -KIMETSU NO YAIBA- the stage 5th Show Releases New Trailer, Visuals
+2025-01-22 14:14:26,977 - INFO - New article found: Is It Wrong to Try to Pick Up Girls in a Dungeon? Game Delayed to Match New Anime Schedule
+2025-01-22 14:14:27,151 - INFO - New article found: Honey Lemon Soda English Dub Reveals Cast & Crew, Release Date
+2025-01-22 14:14:27,332 - INFO - New article found: Ameku M.D.: Doctor Detective English Dub Reveals Cast & Crew, Release Date
+2025-01-22 14:14:27,803 - INFO - New article found: The Ossan Newbie Adventurer English Dub Announced, Cast & Crew Revealed
+2025-01-22 14:14:27,962 - INFO - New article found: Medaka Kuroiwa is Impervious to My Charms English Dub Reveals Cast & Crew, Release Date
+2025-01-22 14:14:28,117 - INFO - New article found: Headhunted to Another World: From Salaryman to Big Four! English Dub Reveals Cast & Crew, Release Date
+2025-01-22 14:14:29,931 - INFO - New article found: J-POP Artist Reol’s Top 9 Anime and Exclusive Video Interview
+2025-01-22 14:14:30,739 - INFO - New article found: The Apothecary Diaries Season 2: Where to Watch, Trailers, Voice Cast & More
+2025-01-22 14:14:30,904 - INFO - New article found: Dr. STONE SCIENCE FUTURE: Where to Watch, Trailers, Voice Cast & More
+2025-01-22 14:14:31,073 - INFO - New article found: Solo Leveling Season 2: Release Time, Where to Watch, Trailers, Voice Cast & More
+2025-01-22 14:14:31,627 - INFO - Found 16 new articles
+2025-01-22 14:15:55,283 - INFO - Starting scraper run
+2025-01-22 14:15:55,285 - INFO - ====== WebDriver manager ======
+2025-01-22 14:15:55,696 - INFO - Get LATEST chromedriver version for google-chrome
+2025-01-22 14:15:56,541 - INFO - Get LATEST chromedriver version for google-chrome
+2025-01-22 14:15:56,920 - INFO - Driver [/home/prodigygenes/.wdm/drivers/chromedriver/linux64/132.0.6834.83/chromedriver-linux64/chromedriver] found in cache
