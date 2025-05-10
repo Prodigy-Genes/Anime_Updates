@@ -1,172 +1,135 @@
-import time
-import logging
-from datetime import datetime
-from dataclasses import dataclass
-from typing import List, Optional
-import telebot
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
-from bs4 import BeautifulSoup
-from dotenv import load_dotenv
 import os
+import time
+from datetime import datetime, timezone
+from dataclasses import dataclass
+from typing import Optional, Set
+
+import feedparser
+from twilio.rest import Client
+from dotenv import load_dotenv
 
 @dataclass
 class NewsItem:
     title: str
     link: str
-    timestamp: str
-    image_url: Optional[str] = None
-    category: Optional[str] = None
-    description: Optional[str] = None
+    published: str
+    summary: Optional[str] = None
+    image: Optional[str] = None
 
-class CrunchyrollBot:
-    def __init__(self):
+class WhatsAppRSSBot:
+    def __init__(self, feed_url: str):
         load_dotenv()
-        self.bot_token = os.getenv("BOT_TOKEN")
-        if not self.bot_token:
-            raise ValueError("Bot token is not set in the .env file.")
-        
-        
-        self.seen_articles = set()
-        self.setup_logging()
-        self.bot = telebot.TeleBot(self.bot_token)
-        self.setup_handlers()
+        self.feed_url      = feed_url
+        self.seen_file     = "seen_ids.txt"
+        self.seen: Set[str]= self._load_seen()
 
-    def setup_logging(self):
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s - %(levelname)s - %(message)s',
-            handlers=[logging.FileHandler('bot.log'), logging.StreamHandler()]
+        # Twilio / WhatsApp creds
+        self.client        = Client(
+            os.getenv("TWILIO_ACCOUNT_SID"),
+            os.getenv("TWILIO_AUTH_TOKEN")
         )
-        self.logger = logging.getLogger(__name__)
+        self.from_whatsapp = os.getenv("TWILIO_WHATSAPP_FROM")
+        self.to_whatsapp   = os.getenv("TWILIO_WHATSAPP_TO")
 
-    def setup_handlers(self):
-        @self.bot.message_handler(commands=['start'])
-        def start(message):
-            self.bot.reply_to(message, "Starting news fetch...")
-            self.fetch_and_send_news(message.chat.id)
+    def _load_seen(self) -> Set[str]:
+        if not os.path.exists(self.seen_file):
+            return set()
+        with open(self.seen_file, "r") as f:
+            return set(line.strip() for line in f)
 
-        @self.bot.message_handler(commands=['help'])
-        def help(message):
-            help_text = (
-                "Available commands:\n"
-                "/start - Fetch latest anime news\n"
-                "/help - Show this help message"
+    def _save_seen(self):
+        with open(self.seen_file, "w") as f:
+            for eid in sorted(self.seen):
+                f.write(eid + "\n")
+
+    def fetch_feed(self):
+        feed = feedparser.parse(self.feed_url)
+        new_items = []
+        for entry in feed.entries:
+            uid = getattr(entry, "id", entry.link)
+            if uid in self.seen:
+                continue
+
+            item = NewsItem(
+                title      = entry.title,
+                link       = entry.link,
+                published  = entry.get("published", datetime.now(timezone.utc).isoformat()),
+                summary    = self._clean_summary(entry.get("summary", "")),
+                image      = self._extract_image(entry)
             )
-            self.bot.reply_to(message, help_text)
+            # Debug: print available image URL
+            print(f"Extracted image URL: {item.image}")
+            new_items.append(item)
+            self.seen.add(uid)
 
-    def setup_driver(self):
-        options = Options()
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        options.add_argument('--window-size=1920x1080')
-        options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
-        return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        return new_items
 
-    def extract_article_data(self, article) -> Optional[NewsItem]:
-        try:
-            html = article.get_attribute('outerHTML')
-            soup = BeautifulSoup(html, 'html.parser')
-            
-            title = (
-                article.find_element(By.CSS_SELECTOR, 'h2, h3').text.strip() or
-                soup.find(['h2', 'h3']).text.strip()
-            )
-            
-            link = (
-                article.find_element(By.CSS_SELECTOR, 'a').get_attribute('href') or
-                soup.find('a')['href']
-            )
-            
-            image_url = None
-            try:
-                image_elem = article.find_element(By.CSS_SELECTOR, 'img')
-                image_url = image_elem.get_attribute('src')
-            except:
-                try:
-                    image_elem = soup.find('img')
-                    image_url = image_elem['src'] if image_elem else None
-                except:
-                    pass
+    def _clean_summary(self, html: str, max_len: int = 200) -> str:
+        import re
+        text = re.sub(r"<[^>]+>", "", html).strip()
+        if len(text) > max_len:
+            text = text[: max_len - 3].rsplit(" ", 1)[0] + "..."
+        return text
 
-            return NewsItem(
-                title=title,
-                link=link,
-                timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                image_url=image_url
-            )
-            
-        except Exception as e:
-            self.logger.error(f"Error extracting article data: {e}")
-            return None
+    def _extract_image(self, entry) -> Optional[str]:
+        # 1) Try RSS enclosure
+        if hasattr(entry, "enclosures") and entry.enclosures:
+            for enc in entry.enclosures:
+                if enc.get("type", "").startswith("image/"):
+                    return enc.get("href")
+        # 2) Try media_content
+        if hasattr(entry, "media_content") and entry.media_content:
+            return entry.media_content[0].get("url")
+        # 3) Try media_thumbnail
+        if hasattr(entry, "media_thumbnail") and entry.media_thumbnail:
+            return entry.media_thumbnail[0].get("url")
+        # 4) Fallback: parse <img> in summary
+        import re
+        m = re.search(r'<img[^>]+src="([^">]+)"', entry.get("summary", ""))
+        if m:
+            return m.group(1)
+        return None
 
-    def fetch_news(self) -> List[NewsItem]:
-        driver = self.setup_driver()
-        anime_data = []
-        
-        try:
-            driver.get("https://www.crunchyroll.com/news")
-            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'article')))
-            articles = driver.find_elements(By.CSS_SELECTOR, 'article')
-            
-            for article in articles:
-                news_item = self.extract_article_data(article)
-                if news_item and self.is_relevant_news(news_item.title):
-                    if news_item.link not in self.seen_articles:
-                        anime_data.append(news_item)
-                        self.seen_articles.add(news_item.link)
-            
-        except Exception as e:
-            self.logger.error(f"Error fetching data: {e}")
-        finally:
-            driver.quit()
-            
-        return anime_data
+    def send_whatsapp(self, item: NewsItem):
+        header = "📰 *Nakama News 中間ニュース Update * 📢\n"
+        body   = (
+            f"{header}"
+            f"*{item.title}*\n"
+            f"_Published: {item.published}_\n\n"
+            f"{item.summary}\n\n"
+            f"👉 Read more: {item.link}"
+        )
 
-    def is_relevant_news(self, text: str) -> bool:
-        keywords = {
-            'release', 'premiere', 'debut', 'announces', 'coming',
-            'launches', 'airs', 'season', 'streaming', 'schedule',
-            'date', 'reveals', 'announced', 'trailer', 'preview',
-            'exclusive', 'first look'
+        # Log sending attempt
+        print(f"Sending message: {item.title}\nImage URL: {item.image}")
+
+        kwargs = {
+            'from_': self.from_whatsapp,
+            'to':    self.to_whatsapp,
+            'body':  body
         }
-        return any(keyword.lower() in text.lower() for keyword in keywords)
+        if item.image:
+            kwargs['media_url'] = [item.image]
 
-    def fetch_and_send_news(self, chat_id):
-        news = self.fetch_news()
-        if not news:
-            self.bot.send_message(chat_id, "No new articles found.")
-            return
-
-        for item in news:
-            try:
-                if item.image_url:
-                    caption = f"🎯 {item.title}\n🔗 {item.link}\n⏰ {item.timestamp}"
-                    self.bot.send_photo(chat_id, item.image_url, caption=caption)
-                else:
-                    text = f"🎯 {item.title}\n🔗 {item.link}\n⏰ {item.timestamp}"
-                    self.bot.send_message(chat_id, text, disable_web_page_preview=False)
-                time.sleep(1)
-            except Exception as e:
-                self.logger.error(f"Error sending message: {e}")
+        msg = self.client.messages.create(**kwargs)
+        print(f"Sent SID: {msg.sid}")
 
     def run(self):
-        self.logger.info("Bot started")
-        self.bot.infinity_polling()
+        new_posts = self.fetch_feed()
+        if not new_posts:
+            print("No new items.")
+        for post in new_posts:
+            try:
+                self.send_whatsapp(post)
+                time.sleep(1)
+            except Exception as e:
+                print("Failed to send:", e)
+        self._save_seen()
 
-def main():
-    bot = CrunchyrollBot()
-    try:
-        bot.run()
-    except KeyboardInterrupt:
-        logging.info("Bot stopped by user")
 
 if __name__ == "__main__":
-    main()
+    RSS_URL = "https://cr-news-api-service.prd.crunchyrollsvc.com/v1/en-US/rss"
+    bot = WhatsAppRSSBot(RSS_URL)
+    bot.run()
+# This script fetches RSS feed items and sends them via WhatsApp using Twilio API.
+# It handles image extraction from the feed and formats the message for WhatsApp.
