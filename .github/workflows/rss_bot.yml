@@ -1,8 +1,8 @@
 name: WhatsApp RSS Bot
 
 on:
-  schedule:                              # ← comment out 
-    - cron: '0 */6 * * *'                # Runs every 6 hours (UTC)
+ # schedule:                              # ← comment out 
+    #- cron: '0 */6 * * *'                # Runs every 6 hours (UTC)
   workflow_dispatch:                     # still allows manual runs
 
 jobs:
